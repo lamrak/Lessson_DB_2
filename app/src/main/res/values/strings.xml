@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">HelloWorld</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="btn_start_activity">Start Activity 2</string>
+    <string name="title_activity_main_activity_with_fragment">MainActivityWithFragment</string>
+    <string name="hello_world_fragment">Hello Fragment</string>
+</resources>
