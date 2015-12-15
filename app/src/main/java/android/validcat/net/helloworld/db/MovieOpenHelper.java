@@ -17,7 +17,7 @@ public class MovieOpenHelper extends SQLiteOpenHelper {
     private Context context;
     private static String createMovieTable =
             "CREATE TABLE " + MovieItem.TABLE_MOVIE + " (" +
-                    MovieItem.FIELD_ID + " INT PRIMARY KEY NOT NULL," +
+                    MovieItem.FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     MovieItem.FIELD_TITLE + " TEXT NOT NULL," +
                     MovieItem.FIELD_DESCR + " TEXT NOT NULL," +
                     MovieItem.FIELD_POSTER + " TEXT NOT NULL," +
@@ -33,7 +33,7 @@ public class MovieOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createMovieTable);
         db.execSQL("CREATE TABLE "+ TABLE_GENRE +" (" +
-                "id INT PRIMARY KEY NOT NULL," +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT NOT NULL," +
                 "description TEXT NOT NULL" +
                 ");");

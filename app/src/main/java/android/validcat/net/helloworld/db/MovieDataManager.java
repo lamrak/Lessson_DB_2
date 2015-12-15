@@ -30,7 +30,6 @@ public class MovieDataManager implements IDataManager<MovieItem> {
         cv.put(MovieItem.FIELD_DESCR, movieItem.description);
         cv.put(MovieItem.FIELD_RATE, movieItem.rate);
         cv.put(MovieItem.FIELD_POSTER, movieItem.poster);
-        cv.put(MovieItem.FIELD_ID, movieItem.id);
 
         long _id = db.insert(MovieItem.TABLE_MOVIE, null, cv);
         db.close();
@@ -52,18 +51,18 @@ public class MovieDataManager implements IDataManager<MovieItem> {
 
     @Override
     public MovieItem get(int id) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(MovieItem.TABLE_MOVIE,
                 MovieItem.projection,
-                MovieItem.FIELD_ID + " = ? ",
+                " id = ? ",
                 whereArgs,
                 null,
                 null,
                 null);
 
         MovieItem item = null;
-        while (c != null && c.moveToFirst()) {
+        if (c.moveToFirst()) {
             item = MovieItem.getItemFromCursor(c);
         }
 
