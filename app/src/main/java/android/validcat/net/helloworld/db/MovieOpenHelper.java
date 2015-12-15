@@ -20,6 +20,7 @@ public class MovieOpenHelper extends SQLiteOpenHelper {
                     MovieItem.FIELD_ID + " INT PRIMARY KEY NOT NULL," +
                     MovieItem.FIELD_TITLE + " TEXT NOT NULL," +
                     MovieItem.FIELD_DESCR + " TEXT NOT NULL," +
+                    MovieItem.FIELD_POSTER + " TEXT NOT NULL," +
                     MovieItem.FIELD_RATE + " INT NOT NULL" +
             ");";
 

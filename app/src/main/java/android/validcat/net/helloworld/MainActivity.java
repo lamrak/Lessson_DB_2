@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.validcat.net.helloworld.db.MovieDataManager;
+import android.validcat.net.helloworld.models.MovieItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -124,14 +126,30 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONObject json = new JSONObject(result);
                 // new MobvieItem -> db
-                String title = json.getString("Title");
-                if (!TextUtils.isEmpty(title))
-                    ((TextView) findViewById(R.id.tv_title)).setText(title);
-                String poster = json.getString("Poster");
-                if (!TextUtils.isEmpty(poster))
+
+                MovieItem item = MovieItem.getItemFromJson(json);
+
+                if (!TextUtils.isEmpty(item.title))
+                    ((TextView) findViewById(R.id.tv_title)).setText(item.title);
+                if (!TextUtils.isEmpty(item.poster))
                     Picasso.with(getApplicationContext())
-                            .load(poster)
+                            .load(item.poster)
                             .into((ImageView) findViewById(R.id.iv_poster));
+
+                MovieDataManager db = new MovieDataManager(getBaseContext());
+                try {
+                    item.id = (int) db.save(item);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                MovieItem itemFromDB = db.get(1);
+
+                if (item.equals(itemFromDB)) {
+                    Log.d(LOG_TAG, "YESS!");
+                } else {
+                    Log.e(LOG_TAG, "Oh no :(");
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();

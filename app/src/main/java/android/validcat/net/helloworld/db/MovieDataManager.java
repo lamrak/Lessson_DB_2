@@ -2,6 +2,7 @@ package android.validcat.net.helloworld.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.validcat.net.helloworld.interfaces.IDataManager;
 import android.validcat.net.helloworld.models.MovieItem;
@@ -23,17 +24,15 @@ public class MovieDataManager implements IDataManager<MovieItem> {
     @Override
     public long save(MovieItem movieItem) throws IOException {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
 
         ContentValues cv = new ContentValues();
         cv.put(MovieItem.FIELD_TITLE, movieItem.getTitle());
-        //...
+        cv.put(MovieItem.FIELD_DESCR, movieItem.description);
+        cv.put(MovieItem.FIELD_RATE, movieItem.rate);
+        cv.put(MovieItem.FIELD_POSTER, movieItem.poster);
+        cv.put(MovieItem.FIELD_ID, movieItem.id);
 
         long _id = db.insert(MovieItem.TABLE_MOVIE, null, cv);
-
-        if (_id != -1)
-            db.setTransactionSuccessful();
-        else throw new IOException();
         db.close();
 
         return _id;
@@ -41,12 +40,34 @@ public class MovieDataManager implements IDataManager<MovieItem> {
 
     @Override
     public boolean delete(MovieItem movieItem) {
-        return false;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] whereArgs = {String.valueOf(movieItem.id)};
+        int rows = db.delete(MovieItem.TABLE_MOVIE, MovieItem.FIELD_ID,
+                whereArgs);
+
+        db.close();
+        return rows > 0;
     }
 
     @Override
     public MovieItem get(int id) {
-        return null;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String[] whereArgs = {String.valueOf(id)};
+        Cursor c = db.query(MovieItem.TABLE_MOVIE,
+                MovieItem.projection,
+                MovieItem.FIELD_ID + " = ? ",
+                whereArgs,
+                null,
+                null,
+                null);
+
+        MovieItem item = null;
+        while (c != null && c.moveToFirst()) {
+            item = MovieItem.getItemFromCursor(c);
+        }
+
+        return item;
     }
 
     @Override
